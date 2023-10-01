@@ -3,15 +3,23 @@
 CustomLineEdit::CustomLineEdit(QWidget* parent, QString regex, QString errorMsg)
     :QLineEdit(parent)
 {
-
-    QRegularExpressionValidator* validator = new QRegularExpressionValidator(QRegularExpression(regex));
-
+    QRegularExpressionValidator* validator = new QRegularExpressionValidator(QRegularExpression(regex), this);
     this->setValidator(validator);
-
     this->errorMsg = errorMsg;
 
-    connect(this, &QLineEdit::inputRejected, this, CustomLineEdit::showErrors);
-    connect(this, &QLineEdit::textChanged, this, CustomLineEdit::hideErrors);
+    connect(this, &QLineEdit::textChanged, this, &CustomLineEdit::onTextChanged);
+}
+
+void CustomLineEdit::onTextChanged(const QString &text)
+{
+    int pos = 0;
+    QString modifiableText = text;  // Créez une copie modifiable de la chaîne de texte
+    QValidator::State state = validator()->validate(modifiableText, pos);  // Utilisez la copie modifiable
+    if (state == QValidator::Invalid) {
+        showErrors();
+    } else {
+        hideErrors();
+    }
 }
 
 void CustomLineEdit::showErrors(){
@@ -24,13 +32,9 @@ void CustomLineEdit::hideErrors(){
 }
 
 void CustomLineEdit::setupUI(QString regex, QString errorMsg){
-    QRegularExpressionValidator* validator = new QRegularExpressionValidator(QRegularExpression(regex));
-
+    QRegularExpressionValidator* validator = new QRegularExpressionValidator(QRegularExpression(regex), this);
     this->setValidator(validator);
-
     this->errorMsg = errorMsg;
 
-    connect(this, &QLineEdit::inputRejected, this, CustomLineEdit::showErrors);
-    connect(this, &QLineEdit::textChanged, this, CustomLineEdit::hideErrors);
-
+    connect(this, &QLineEdit::textChanged, this, &CustomLineEdit::onTextChanged);
 }

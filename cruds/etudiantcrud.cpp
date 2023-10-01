@@ -1,5 +1,5 @@
 #include "etudiantcrud.h"
-#include "ui_crudetudiant.h"
+#include "ui_etudiantcrud.h"
 #include "dialogs/addetudiant.h"
 
 EtudiantCrud::EtudiantCrud(QWidget *parent, Db* database) :

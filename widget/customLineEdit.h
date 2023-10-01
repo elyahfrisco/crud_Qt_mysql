@@ -9,7 +9,6 @@
 #include <QRegularExpressionValidator>
 #include <QToolTip>
 
-
 class CustomLineEdit: public QLineEdit
 {
     Q_OBJECT
@@ -20,6 +19,7 @@ public:
 private slots:
     void showErrors();
     void hideErrors();
+    void onTextChanged(const QString &text);  // Ajoutez cette ligne
 
 private:
     QString errorMsg;
